@@ -54,53 +54,10 @@
     const geometry = new THREE.BufferGeometry();
     // create a simple square shape. We duplicate the top left and bottom right
     // vertices because each vertex needs to appear once per triangle.
-    const vertices = new Float32Array( [
-
-        // Avant
-        //Face sup 1
-         4.0, 0,  0,
-         0,  0,  -1.0,
-         0,  1.0, 0,
-
-        //Face sup 2
-         4.0, 0,  0,
-         0,  1.0, 0,
-         0,  0,  1.0,
-
-        // Derriere
-        4.0, 0,  0,
-         0,  -1.0,  0,
-         0, 0,  -1.0,
-
-         0, -1.0, 0,
-         4.0,  0,  0,
-         0,  0,  1,
-
-        // Côté 1
-         0,  -1.0,  0,
-        -1.0, 0,  0,
-         0, 0,  -1.0,
-
-         -1.0, 0,  0,
-         0,  1.0,  0,
-         0, 0,  -1.0,
-
-         0, 1.0,  0,
-         -1.0, 0,  0,
-         0,  0,  1.0,
-
-        -1,0,0,
-         0, 1.0, 0,
-         0,0,-1,
-
-         -1,0,0,
-         0, -1.0, 0,
-         0,0,1,
-
-    ] );
+    var octa = GenerateOctahedron(4,4,5,4,4,1);
 
     // itemSize = 3 because there are 3 values (components) per vertex
-    geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    geometry.setAttribute( 'position', new THREE.BufferAttribute( octa, 3 ) );
     const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
     const mesh = new THREE.Mesh( geometry, material );
     scene.add(mesh);
@@ -113,6 +70,50 @@
       }
 
       animate();
+
+
+    function GenerateOctahedron(top, left, right, front, back, bottom)
+    {
+
+    	return new Float32Array( [
+	        // Avant
+	        //Face sup 1
+	         right, 0,  0,
+	         0,  0,  -back,
+	         0,  top, 0,
+
+	        //Face sup 2
+	         right, 0,  0,
+	         0,  top, 0,
+	         0,  0,  front,
+
+	        // Derriere
+	         right, 0,  0,
+	         0,  -bottom,  0,
+	         0, 0,  -back,
+
+	         0, -bottom, 0,
+	         right,  0,  0,
+	         0,  0,  front,
+
+	        // Côté 1
+	         0,  -bottom,  0,
+	        -left, 0,  0,
+	         0, 0,  -back,
+
+	         -left, 0,  0,
+	         0,  top,  0,
+	         0, 0,  -back,
+
+	         0, top,  0,
+	         -left, 0,  0,
+	         0,  0,  front,
+
+	         -left, 0, 0,
+	         0, -bottom, 0,
+	         0, 0, front,
+	    ] );
+    }
     </script>
   </body>
 </html>
