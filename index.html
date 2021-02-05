@@ -59,71 +59,20 @@
       controls.minDistance = 2;
       controls.maxDistance = 3000;
 
-	    // création du mesh et ajout comme fils du premier mesh
-	    const geometry = new THREE.BufferGeometry();
-	    // create a simple square shape. We duplicate the top left and bottom right
-	    // vertices because each vertex needs to appear once per triangle.
-	    var octa = GenerateOctahedron(1.56,2.5,1.2,1.58,1.2,1.8);
-    var a = [0,1.0,0];
-    var b = [0,0,-1.0];
-    var c = [1.0,0,0];
-    var d = [0,-1.0,0];
-    var e = [-1.0,0,0];
-    var f = [0,0,1.0];
+      // création du mesh et ajout comme fils du premier mesh
+      const geometry = new THREE.BufferGeometry();
+      // create a simple square shape. We duplicate the top left and bottom right
+      // vertices because each vertex needs to appear once per triangle.
+      var octa = GenerateOctahedron(1.56,2.5,1.2,1.58,1.2,1.8);
 
-    const vertices = new Float32Array( [
+      // itemSize = 3 because there are 3 values (components) per vertex
+      geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+      geometry.computeVertexNormals()
+      const material = new THREE.MeshPhongMaterial( {color: 0xffffff} );
+      const mesh = new THREE.Mesh( geometry, material );
+      scene.add(mesh);
 
-        // Avant
-        //Face sup 1 ABC
-         b[0], b[1], b[2],
-         a[0], a[1], a[2],
-         c[0], c[1], c[2],
-
-        //Face sup 2 ACF
-         a[0], a[1], a[2],
-         f[0], f[1], f[2],
-         c[0], c[1], c[2],
-
-        //Face sup 3 AEF
-         a[0], a[1], a[2],
-         e[0], e[1], e[2],
-         f[0], f[1], f[2],
-
-        //Face sup 4 AEB
-         a[0], a[1], a[2],
-         b[0], b[1], b[2],
-         e[0], e[1], e[2],
-
-        //Face inf 1 BCD
-         b[0], b[1], b[2],
-         c[0], c[1], c[2],
-         d[0], d[1], d[2],
-
-        //Face inf 2 EBD
-         e[0], e[1], e[2],
-         b[0], b[1], b[2],
-         d[0], d[1], d[2],
-
-        //Face inf 3 CFD
-         c[0], c[1], c[2],
-         f[0], f[1], f[2],
-         d[0], d[1], d[2],
-
-        //Face inf 1 EFD
-         f[0], f[1], f[2],
-         e[0], e[1], e[2],
-         d[0], d[1], d[2],
-
-    ] );
-
-    // itemSize = 3 because there are 3 values (components) per vertex
-    geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    geometry.computeVertexNormals()
-    const material = new THREE.MeshPhongMaterial( {color: 0xffffff} );
-    const mesh = new THREE.Mesh( geometry, material );
-    scene.add(mesh);
-
-    mesh.add(new THREE.AxesHelper(2));
+      mesh.add(new THREE.AxesHelper(2));
     
 
       function animate() {
