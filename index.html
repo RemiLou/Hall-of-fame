@@ -30,15 +30,10 @@
       scene.background = new THREE.Color(0, 0, 0);
 
       // création des lumières
-      var directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      directionalLight.position.set(0,2,0)
+
+      var directionalLight = new THREE.DirectionalLight(0xfffff0, 0.8);
+      directionalLight.position.set(0,.2,0.8)
       scene.add(directionalLight);
-
-      const rectLight = new THREE.RectAreaLight( 0xffffff, 1,  250, 250 );
-      rectLight.position.set( 0, 0, -10 );
-      rectLight.lookAt( 0, 0, -11 );
-
-      scene.add(rectLight);
 
       var ambientLight = new THREE.AmbientLight(0xffffff, .1);
       scene.add(ambientLight);
@@ -54,56 +49,67 @@
     const geometry = new THREE.BufferGeometry();
     // create a simple square shape. We duplicate the top left and bottom right
     // vertices because each vertex needs to appear once per triangle.
+    var a = [0,1.0,0];
+    var b = [0,0,-1.0];
+    var c = [1.0,0,0];
+    var d = [0,-1.0,0];
+    var e = [-1.0,0,0];
+    var f = [0,0,1.0];
+
     const vertices = new Float32Array( [
 
         // Avant
-        //Face sup 1
-         4.0, 0,  0,
-         0,  0,  -1.0,
-         0,  1.0, 0,
+        //Face sup 1 ABC
+         b[0], b[1], b[2],
+         a[0], a[1], a[2],
+         c[0], c[1], c[2],
 
-        //Face sup 2
-         4.0, 0,  0,
-         0,  1.0, 0,
-         0,  0,  1.0,
+        //Face sup 2 ACF
+         a[0], a[1], a[2],
+         f[0], f[1], f[2],
+         c[0], c[1], c[2],
 
-        // Derriere
-        4.0, 0,  0,
-         0,  -1.0,  0,
-         0, 0,  -1.0,
+        //Face sup 3 AEF
+         a[0], a[1], a[2],
+         e[0], e[1], e[2],
+         f[0], f[1], f[2],
 
-         0, -1.0, 0,
-         4.0,  0,  0,
-         0,  0,  1,
+        //Face sup 4 AEB
+         a[0], a[1], a[2],
+         b[0], b[1], b[2],
+         e[0], e[1], e[2],
 
-        // Côté 1
-         0,  -1.0,  0,
-        -1.0, 0,  0,
-         0, 0,  -1.0,
+        //Face inf 1 BCD
+         b[0], b[1], b[2],
+         c[0], c[1], c[2],
+         d[0], d[1], d[2],
 
-         -1.0, 0,  0,
-         0,  1.0,  0,
-         0, 0,  -1.0,
+        //Face inf 2 EBD
+         e[0], e[1], e[2],
+         b[0], b[1], b[2],
+         d[0], d[1], d[2],
 
-         0, 1.0,  0,
-         -1.0, 0,  0,
-         0,  0,  1.0,
+        //Face inf 3 CFD
+         c[0], c[1], c[2],
+         f[0], f[1], f[2],
+         d[0], d[1], d[2],
 
-        -1,0,0,
-         0, 1.0, 0,
-         0,0,-1,
-
-         -1,0,0,
-         0, -1.0, 0,
-         0,0,1,
+        //Face inf 1 EFD
+         f[0], f[1], f[2],
+         e[0], e[1], e[2],
+         d[0], d[1], d[2],
 
     ] );
 
     // itemSize = 3 because there are 3 values (components) per vertex
     geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+    geometry.computeVertexNormals()
+    const material = new THREE.MeshPhongMaterial( {color: 0xffffff} );
     const mesh = new THREE.Mesh( geometry, material );
     scene.add(mesh);
+
+    mesh.add(new THREE.AxesHelper(2));
+    
 
       function animate() {
         controls.update();
