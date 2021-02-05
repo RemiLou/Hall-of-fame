@@ -113,7 +113,8 @@
 
       function animate() {
         controls.update();
-
+        geometry.rotateY(0.01);
+        geometry.rotateX(0.01);
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
       }
