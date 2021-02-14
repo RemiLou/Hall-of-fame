@@ -31,7 +31,24 @@
 	<!-- Event capture -->
 	<script>
 
-		$("#character").bind("change", function() {ChangeCameraPosition($("#character").val(), camera)} );
+		$("#character").bind("change", function() 
+			{
+				var octa = OctahedronPerCharacter($("#character").val());
+
+				if (scene.getObjectByName("test"))
+					scene.remove(scene.getObjectByName("test"));
+
+				// création du mesh et ajout comme fils du premier mesh
+			    const geometry = new THREE.BufferGeometry();
+
+			    // itemSize = 3 because there are 3 values (components) per vertex
+			    geometry.setAttribute('position', new THREE.BufferAttribute( octa, 3 ) );
+			    const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+			    const mesh = new THREE.Mesh( geometry, material );
+			    mesh.name = "test";
+			    scene.add(mesh);
+			} 
+		);
 
 		// création du renderer
 		var renderer = new THREE.WebGLRenderer();
@@ -69,31 +86,6 @@
 	    controls.enableDamping = true;
 	    controls.maxDistance = 3000;
 
-	    // création du mesh et ajout comme fils du premier mesh
-	    const geometry = new THREE.BufferGeometry();
-	    // create a simple square shape. We duplicate the top left and bottom right
-	    // vertices because each vertex needs to appear once per triangle.
-	    var octa = GenerateOctahedron(1.56,2.5,1.2,1.58,1.2,1.8);
-
-	    // itemSize = 3 because there are 3 values (components) per vertex
-	    geometry.setAttribute('position', new THREE.BufferAttribute( octa, 3 ) );
-	    const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-	    const mesh = new THREE.Mesh( geometry, material );
-	    scene.add(mesh);
-
-	    // création du mesh et ajout comme fils du premier mesh
-	    const geometry2 = new THREE.BufferGeometry();
-	    // create a simple square shape. We duplicate the top left and bottom right
-	    // vertices because each vertex needs to appear once per triangle.
-	    var octa2 = GenerateOctahedron(1.56,2.5,1.2,1.58,1.2,1.8);
-
-	    // itemSize = 3 because there are 3 values (components) per vertex
-	    geometry2.setAttribute('position', new THREE.BufferAttribute( octa2, 3 ) );
-	    const material2 = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-	    const mesh2 = new THREE.Mesh( geometry2, material2 );
-	    scene.add(mesh2);
-
-	    mesh2.position.x = -20;
 	    function animate() {
 	      controls.update();
 

@@ -53,38 +53,22 @@ function GenerateOctahedron(top, left, right, front, back, bottom)
 	] );
 }
 
-function ChangeCameraPosition(character, camera)
+function ChangeCharacter(character)
 {
-	console.log(camera);
-  switch (parseInt(character)) {
-    case 1:
-
-    	return [0,0,0];
-    break;
-    case 2:
-		  camera.position.z = 100;
-		  camera.position.x = 100;
-    break;
-    case 3:
-    	return [0,0,0];
-    break;
-  }
+	OctahedronPerCharacter(character);
 }
 
-function HideAndShow(character, camera)
+function OctahedronPerCharacter(character)
 {
-	console.log(camera);
   switch (parseInt(character)) {
     case 1:
-
-    	return [0,0,0];
+    	return GenerateOctahedron(10,2,1,5,6,3);
     break;
     case 2:
-		  camera.position.z = 100;
-		  camera.position.x = 100;
+    	return GenerateOctahedron(8,5,3,2,2,5);
     break;
     case 3:
-    	return [0,0,0];
+    	return GenerateOctahedron(2,4,5,8,2,1);
     break;
   }
 }
