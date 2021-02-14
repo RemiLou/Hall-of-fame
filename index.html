@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset=utf-8>
-    <title>three.js app</title>
+    <title>Hall of fame</title>
     <style>
       body {
         margin: 0;
@@ -14,10 +14,12 @@
   	<link rel="stylesheet" href="styles.css">
     <script src="https://threejs.org/build/three.min.js"></script>
     <script src="OrbitControls.js"></script>
+    <script src="jquery-3.5.1.min.js"></script>
     <script src="functions.js"></script>
 
     <!-- HTML -->
     <div class="params">
+    	<h1>Paramétrage</h1>
 		<label>Choix du personnage:</label>
 		<select id="character">
 		    <option value="1">Fredrich</option>
@@ -25,69 +27,76 @@
 		    <option value="3">Didier</option>
 		</select>
 	</div>
-    <a href="Site_php/">Menu</a>
-    <script>
-      document.getElementById("character").addEventListener("change", ChangeCameraPosition());
 
-      // création du renderer
-      var renderer = new THREE.WebGLRenderer();
-      document.body.appendChild(renderer.domElement);
-      renderer.setSize(window.innerWidth, window.innerHeight);
+	<!-- Event capture -->
+	<script>
 
-      // création de la caméra
-      var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 1000);
+		$("#character").bind("change", function() 
+			{
+				var octa = OctahedronPerCharacter($("#character").val());
 
-      // création de la scène
-      var scene = new THREE.Scene();
+				if (scene.getObjectByName("test"))
+					scene.remove(scene.getObjectByName("test"));
 
-      // couleur de fond noire
-      scene.background = new THREE.Color(0, 0, 0);
+				// création du mesh et ajout comme fils du premier mesh
+			    const geometry = new THREE.BufferGeometry();
 
-      // création des lumières
+			    // itemSize = 3 because there are 3 values (components) per vertex
+			    geometry.setAttribute('position', new THREE.BufferAttribute( octa, 3 ) );
+			    const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+			    const mesh = new THREE.Mesh( geometry, material );
+			    mesh.name = "test";
+			    scene.add(mesh);
+			} 
+		);
 
-      var directionalLight = new THREE.DirectionalLight(0xfffff0, 0.8);
-      directionalLight.position.set(0,.2,0.8)
-      scene.add(directionalLight);
+		// création du renderer
+		var renderer = new THREE.WebGLRenderer();
+	    document.body.appendChild(renderer.domElement);
+	    renderer.setSize(window.innerWidth, window.innerHeight);
 
-      var ambientLight = new THREE.AmbientLight(0xffffff, .1);
-      scene.add(ambientLight);
+	    // création de la caméra
+	    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 1000);
 
-      // positionnement de la caméra
-      camera.position.z = 30;
+	    // création de la scène
+	    var scene = new THREE.Scene();
 
-      var controls = new THREE.OrbitControls(camera, renderer.domElement);
-      controls.minDistance = 2;
-      controls.maxDistance = 3000;
+	    // couleur de fond noire
+	    scene.background = new THREE.Color(0, 0, 0);
 
-      // création du mesh et ajout comme fils du premier mesh
-      const geometry = new THREE.BufferGeometry();
-      // create a simple square shape. We duplicate the top left and bottom right
-      // vertices because each vertex needs to appear once per triangle.
-      var octa = GenerateOctahedron(1.56,2.5,1.2,1.58,1.2,1.8);
+	    // création des lumières
+	    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+	    directionalLight.position.set(0,2,0)
+	    scene.add(directionalLight);
 
-      // itemSize = 3 because there are 3 values (components) per vertex
-      geometry.setAttribute( 'position', new THREE.BufferAttribute( octa, 3 ) );
-      geometry.computeVertexNormals()
-      const material = new THREE.MeshPhongMaterial( {color: 0xffffff} );
-      const mesh = new THREE.Mesh( geometry, material );
-      scene.add(mesh);
+	    const rectLight = new THREE.RectAreaLight( 0xffffff, 1,  250, 250 );
+	    rectLight.position.set( 0, 0, -10 );
+	    rectLight.lookAt( 0, 0, -11 );
 
-      mesh.add(new THREE.AxesHelper(2));
-    
+	    scene.add(rectLight);
 
-      function animate() {
-        controls.update();
-        geometry.rotateY(0.01);
-        geometry.rotateX(0.01);
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-      }
+	    var ambientLight = new THREE.AmbientLight(0xffffff, .1);
+	    scene.add(ambientLight);
+
+	    // positionnement de la caméra
+	    camera.position.x = 30;
+
+	    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+	    controls.minDistance = 2;
+	    controls.enableDamping = true;
+	    controls.maxDistance = 3000;
+
+	    function animate() {
+	      controls.update();
+
+	      requestAnimationFrame(animate);
+	      renderer.render(scene, camera);
+	    }
 
 	    animate();
 
 	    const labelContainerElem = document.querySelector('#labels');
 	</script>
-
 
   </body>
 </html>
