@@ -45,6 +45,7 @@
 			    geometry.setAttribute('position', new THREE.BufferAttribute( octa, 3 ) );
 			    const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 			    const mesh = new THREE.Mesh( geometry, material );
+				mesh.material.wireframe = true;
 			    mesh.name = "test";
 			    scene.add(mesh);
 			} 
