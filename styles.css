@@ -39,11 +39,3 @@ html, body {
 #labels>div:hover {
   color: red;
 }
-.params{
-    position: absolute;
-    display: block;
-    color: white;
-    z-index: 99;
-    left: 80%;
-    top: 5%;
-}
